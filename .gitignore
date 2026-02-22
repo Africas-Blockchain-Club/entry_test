@@ -58,3 +58,4 @@ student_submissions.md
 submissions/
 create_gmail_drafts.py
 extract_emails.sh
+drafts_output.txt
