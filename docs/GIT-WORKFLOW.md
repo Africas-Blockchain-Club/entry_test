@@ -42,7 +42,7 @@ git config --list
 git remote -v
 
 # Expected output:
-# origin  https://gitlab.wethinkco.de/YOUR_USERNAME/blockchain_dev_entry_test.git
+# origin  https://gitlab.wethinkco.de/YOUR_USERNAME/entry_test.git
 ```
 
 ---
@@ -309,7 +309,7 @@ git status && git log --oneline -3
 
 ```bash
 # Change to HTTPS
-git remote set-url origin https://gitlab.wethinkco.de/YOUR_USERNAME/blockchain_dev_entry_test.git
+git remote set-url origin https://gitlab.wethinkco.de/YOUR_USERNAME/entry_test.git
 ```
 
 ### "Your branch is behind 'origin/main'"
@@ -326,7 +326,7 @@ git push origin main
 **Solution:** Navigate to correct directory
 
 ```bash
-cd blockchain_dev_entry_test
+cd entry_test
 ```
 
 ---

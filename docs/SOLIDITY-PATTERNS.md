@@ -331,37 +331,109 @@ struct Gig {
 
 ---
 
-## 10. Common Vulnerabilities Checklist
+## 10. Consuming an Oracle Safely
+
+**Problem:** The chain cannot see off-chain truth. A price has to be delivered by
+an external contract, and that contract can be stale, wrong, or unavailable.
+
+### Bad Example (spot price as oracle)
+
+```solidity
+// Manipulable with a flash loan in a single transaction. Solcurity D3.
+function ethPrice() public view returns (uint256) {
+    (uint112 r0, uint112 r1, ) = pair.getReserves();
+    return (uint256(r1) * 1e18) / uint256(r0);
+}
+```
+
+### Good Example (decentralised feed, validated)
+
+```solidity
+uint256 private constant MAX_FEED_AGE = 3 hours;
+
+function getPrice() public view returns (uint256) {
+    (, int256 answer, , uint256 updatedAt, ) = priceFeed.latestRoundData();
+
+    // D1/D5: never trust the return values blindly
+    if (answer <= 0) revert InvalidPrice();
+    if (block.timestamp - updatedAt > MAX_FEED_AGE) revert StalePrice();
+
+    // Feed reports 8 decimals; scale to 18 to match wei. C24: scale, then divide.
+    return uint256(answer) * 1e10;
+}
+```
+
+Pick `MAX_FEED_AGE` from the feed's published heartbeat, not from intuition.
+
+---
+
+## 11. Randomness
+
+**Problem:** Every value on-chain is public and deterministic. Anything you can
+read, an attacker read first.
+
+### Bad Example (SWC-120, Solcurity C9)
+
+```solidity
+// The proposer can withhold or reorder the block. Any caller can compute
+// the same value in the same block and only enter when it favours them.
+uint256 winner = uint256(
+    keccak256(abi.encodePacked(block.timestamp, block.prevrandao, msg.sender))
+) % players.length;
+```
+
+### Good Options
+
+1. **Verifiable randomness (Chainlink VRF)** - request in one transaction,
+   receive in a callback. Lock the contract into a `CALCULATING` state between
+   the two so nobody can enter once the request is in flight.
+2. **Commit-reveal** - participants submit `keccak256(secret, salt)` first, then
+   reveal. Combine the revealed secrets. Requires a penalty for non-revealers,
+   or the last revealer can decide the outcome by staying silent.
+
+Never mix a manipulable source into an otherwise sound one and assume the sound
+half wins.
+
+---
+
+## 12. Common Vulnerabilities Checklist
 
 ### Before Submitting, Check:
 
-- [ ] Used checks-effects-interactions pattern
-- [ ] All functions have access control (public/private/onlyOwner)
-- [ ] All inputs validated with `require`
-- [ ] No reentrancy vulnerabilities
-- [ ] Events emitted for state changes
-- [ ] Used `call` instead of `transfer` for ETH
-- [ ] State updated before external calls
-- [ ] No integer overflow (or using 0.8+)
-- [ ] Tested with edge cases
+- [ ] Used checks-effects-interactions pattern (`F6`)
+- [ ] All privileged functions carry the right modifier (`F9`)
+- [ ] All inputs validated, even from trusted callers (`F5`)
+- [ ] No reentrancy vulnerabilities; lock documented if used (`X3`, `X4`, `C48`)
+- [ ] Events emitted for every storage mutation, actors indexed (`T2`, `E2`)
+- [ ] Used `call` instead of `transfer`, and checked the return (`C33`, `X5`)
+- [ ] Randomness is not derived from block data (`C9`)
+- [ ] External/oracle return values sanity-checked (`D1`, `D5`)
+- [ ] Multiply before divide; rounding direction justified (`C24`, `C47`)
+- [ ] No unbounded loops or arrays (`C3`)
+- [ ] `constant`/`immutable` used where possible (`V2`, `V3`)
+- [ ] Tested with edge cases, plus at least one adversarial test (`P2`, `P3`)
 
 ---
 
 ## Quick Security Reference
 
-| Vulnerability | Protection |
-|--------------|------------|
-| Reentrancy | Checks-Effects-Interactions + ReentrancyGuard |
-| Unauthorized Access | `onlyOwner` modifier |
-| Integer Overflow | Solidity 0.8+ or SafeMath |
-| Failed Transfers | Use `call` + check return value |
-| Denial of Service | Pull over Push pattern |
-| Front-running | Commit-reveal scheme |
+| Vulnerability | Protection | Solcurity |
+|--------------|------------|-----------|
+| Reentrancy | Checks-Effects-Interactions + ReentrancyGuard | `F6`, `C48` |
+| Unauthorized access | `onlyOwner` / role modifier | `F9`, `C32` |
+| Integer overflow | Solidity 0.8+ checked math | `C1` |
+| Failed transfers | Use `call` + check return value | `C33`, `X5` |
+| Denial of service | Pull over push; bound your loops | `C26`, `C3` |
+| Predictable randomness | VRF or commit-reveal | `C9` |
+| Price manipulation | Decentralised feed + staleness checks | `D3`, `D5` |
+| Front-running | Commit-reveal scheme | `F7` |
 
 ---
 
 ## Additional Resources
 
+- [The Solcurity Standard](https://github.com/transmissions11/solcurity) - the checklist this assessment marks against
+- [Cyfrin Updraft](https://updraft.cyfrin.io/) - Blockchain Basics and Solidity courses
 - [Solidity Security Best Practices](https://consensys.github.io/smart-contract-best-practices/)
 - [SWC Registry](https://swcregistry.io/) - Smart Contract Weakness Classification
 - [OpenZeppelin Contracts](https://docs.openzeppelin.com/contracts/) - Audited implementations

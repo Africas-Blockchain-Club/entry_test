@@ -1,0 +1,80 @@
+name: Auto-Mark Entry Test
+
+# Runs on every push and reports the score so far.
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  mark:
+    name: Mark submission
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the submission
+        uses: actions/checkout@v4
+        with:
+          # Full history: the marker locks your MCQ answers to the first commit
+          # in which all eight are answered, so it needs to see every commit.
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install
+
+      # Compiling separately keeps the test steps' stdout as clean JSON, and
+      # makes a compile error obvious rather than confusing.
+      - name: Compile contracts
+        id: compile
+        run: npx hardhat compile --force
+        continue-on-error: true
+
+      - name: Run the marking tests
+        if: always()
+        run: |
+          npx hardhat --config hardhat.grading.config.js test > grading/report.json 2> grading/stderr.txt || true
+
+      - name: Run the candidate's own tests
+        if: always()
+        run: |
+          npx hardhat --config hardhat.own.config.js test > grading/own.json 2>> grading/stderr.txt || true
+
+      # Marks the written reasoning with Claude. Needs ANTHROPIC_API_KEY, which
+      # GitHub does not pass to forks - so in a candidate's fork this step is a
+      # no-op and those 23 marks show as pending. The assessor's run fills them
+      # in. See ASSESSOR.md.
+      - name: Mark the written reasoning
+        if: always()
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node grading/mark-reasoning.js
+
+      - name: Score and give the verdict
+        if: always()
+        id: score
+        run: node grading/grade.js
+
+      - name: Explain a compile failure
+        if: always() && steps.compile.outcome == 'failure'
+        run: |
+          echo "::error::Your contracts did not compile, so all 50 contract marks are zero. Run 'npx hardhat compile' locally to see the errors."
+
+      - name: Upload the full report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: result
+          path: |
+            grading/report.md
+            grading/report.json
+            grading/own.json
+            grading/reasoning.json
+            grading/score.json
+            grading/stderr.txt
+          if-no-files-found: warn

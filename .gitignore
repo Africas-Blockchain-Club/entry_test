@@ -13,6 +13,12 @@ cache/
 typechain/
 typechain-types/
 
+# Foundry
+out/
+cache_forge/
+broadcast/
+lib/
+
 # Environment variables
 .env
 .env.local
@@ -52,6 +58,11 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Auto-marker output (regenerated on every run)
+grading/report.json
+grading/report.md
+grading/stderr.txt
+
 # Grading (Local Only)
 docs/GRADING_RUBRIC.md
 grading_feedback/
@@ -60,3 +71,11 @@ submissions/
 create_gmail_drafts.py
 extract_emails.sh
 drafts_output.txt
+# Assessor-only (never ship to candidates)
+ASSESSOR.md
+
+grading/reasoning.json
+grading/score.json
+
+# Local assessor tooling (never commit - contains candidate data and your API key)
+assessor/

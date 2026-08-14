@@ -1,0 +1,19 @@
+{
+  "name": "entry-test",
+  "version": "1.0.0",
+  "description": "Blockchain Developer Entry Test",
+  "private": true,
+  "scripts": {
+    "build": "hardhat compile",
+    "test": "hardhat test",
+    "grade": "node grading/grade.js",
+    "mark-reasoning": "node grading/mark-reasoning.js"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "hardhat": "^2.22.0"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.70.0"
+  }
+}
