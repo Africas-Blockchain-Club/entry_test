@@ -21,13 +21,13 @@ eight multiple-choice questions drawn directly from the course.
 | # | Step | Time |
 |---|---|---|
 | 1 | Fork this repo and **turn on Actions in your fork** | 2 min |
-| 2 | Clone your fork and install | 5 min |
+| 2 | Open the code: clone locally **or** launch a Codespace | 5 min |
 | 3 | Check the toolchain, then **push immediately** to prove marking works | 3 min |
 | 4 | Answer Part A - all 8 questions **and** the reasoning boxes | 40 min |
 | 5 | Build `FreelanceBountyBoard.sol`, pushing as you go | 55 min |
 | 6 | Build `DecentralisedRaffle.sol`, pushing as you go | 50 min |
 | 7 | Fill in `PartB_Design.md` and `PartB_Tests.md`, write your own test | 20 min |
-| 8 | Final push, then check your score in the Actions tab | 5 min |
+| 8 | Final push **before time is called**, then check your score | 5 min |
 
 Each step is spelled out below. **Do not skip step 1** - without it you get no
 score all morning.
@@ -43,8 +43,10 @@ Fork this repository to your own GitHub account.
 > on, nothing is marked and you will see no score all morning. Nobody can do
 > this for you.
 >
-> 1. Open **your fork** on github.com - the copy under **your own username**,
->    not this one.
+> Do this straight after forking, on the copy that is now under your own
+> username:
+>
+> 1. Open your fork on github.com.
 > 2. Click the **Actions** tab, along the top next to Code, Issues and Pull
 >    requests.
 > 3. A yellow banner appears: *"Workflows aren't being run on this forked
@@ -55,7 +57,11 @@ Fork this repository to your own GitHub account.
 > Once, at the start. Every push after that is marked automatically. If there is
 > no banner, Actions are already on - push something and check a run appears.
 
-### Step 2: Clone your fork and install
+### Step 2: Open the code - on your machine, or in the browser
+
+Two ways to work. Pick one; they are marked identically.
+
+**Option A - on your own machine**
 
 ```bash
 git clone [YOUR_FORK_URL]
@@ -65,6 +71,23 @@ npm install
 
 Clone **your fork**, not this repository. If you clone this one you cannot push,
 and nothing you write will ever be marked.
+
+**Option B - GitHub Codespaces, in the browser**
+
+Nothing to install, and it works on a borrowed or locked-down laptop.
+
+1. On **your fork**, click the green **Code** button.
+2. Choose the **Codespaces** tab, then **Create codespace on main**.
+3. Wait for the editor to load, then in its terminal run `npm install`.
+
+You still fork first (Step 1), and you still commit and push exactly as below -
+a Codespace is a normal git checkout, just hosted. Your pushes go to your fork
+and are marked the same way.
+
+> [!WARNING]
+> A Codespace stops when you close the tab, and **anything you have not
+> committed and pushed does not exist as far as marking is concerned.** Push
+> often, and push before you close it.
 
 ### Step 3: Check the toolchain, then push straight away
 
@@ -181,7 +204,7 @@ beat one perfect contract and one empty one.
 > would have done", or "yes, this attack works against my code and here is the
 > fix", earns marks. Claiming something is secure when it is not earns zero.
 
-### Step 8: Final push, then check your score
+### Step 8: Final push before time is called, then stop
 
 ```bash
 git add -A
@@ -192,6 +215,17 @@ git push
 Then open the **Actions** tab in your fork, click the newest run, and read the
 score table on the summary page. Every test is listed with the marks it carries
 and, when it fails, the reason.
+
+> [!CAUTION]
+> **Do not push anything after time is called.**
+>
+> Marking uses your last commit **inside the three-hour window**. Anything
+> pushed after the deadline is ignored - it does not add marks, and it does not
+> replace what you submitted in time.
+>
+> So finishing the raffle at home and pushing it that evening gains you nothing.
+> Get your work in before the clock stops, even if it is incomplete. An
+> unfinished contract pushed in time beats a perfect one pushed late.
 
 ---
 
@@ -325,5 +359,7 @@ entry_test/
   one.
 - **Be honest in the written sections.** "I ran out of time and here is what I
   would have done" earns marks. Overclaiming loses them.
+- **Push before the deadline, not after.** Only your last commit inside the
+  three-hour window is marked. Late pushes are ignored entirely.
 
 **All the best.**
