@@ -250,7 +250,7 @@ function main() {
   L.push(
     reasoning.marked
       ? "This is your full score. Every section is broken down below."
-      : `That is the automatically marked part. Your written reasoning is worth a further **${REASONING_TOTAL} marks** and is marked after you submit, so your final score will be between ${total} and ${ceiling}.`
+      : `That is the automatically marked part, and it goes up every time you push. Your written reasoning is worth a further **${REASONING_TOTAL} marks** on top of this and is marked after you submit.`
   );
   L.push("");
   L.push(
