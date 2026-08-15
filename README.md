@@ -22,7 +22,7 @@ eight multiple-choice questions drawn directly from the course.
 |---|---|---|
 | 1 | Fork this repo and **turn on Actions in your fork** | 2 min |
 | 2 | Clone your fork and install | 5 min |
-| 3 | Check the toolchain works | 2 min |
+| 3 | Check the toolchain, then **push immediately** to prove marking works | 3 min |
 | 4 | Answer Part A - all 8 questions **and** the reasoning boxes | 40 min |
 | 5 | Build `FreelanceBountyBoard.sol`, pushing as you go | 55 min |
 | 6 | Build `DecentralisedRaffle.sol`, pushing as you go | 50 min |
@@ -66,7 +66,9 @@ npm install
 Clone **your fork**, not this repository. If you clone this one you cannot push,
 and nothing you write will ever be marked.
 
-### Step 3: Check the toolchain works
+### Step 3: Check the toolchain, then push straight away
+
+First, check the toolchain:
 
 ```bash
 npx hardhat compile
@@ -78,6 +80,26 @@ set up - everything else is already configured.
 `npx hardhat test` will **fail** right now, and that is correct: the skeletons
 are empty, so the example tests have nothing to pass against. They turn green as
 you implement.
+
+**Now push, before you write a single line of code:**
+
+```bash
+git commit --allow-empty -m "setup check"
+git push
+```
+
+> [!CAUTION]
+> **Then go to the Actions tab in your fork and confirm you see a run with a
+> score in it.** You are looking for a summary headed *"Entry Test - Score"*
+> showing **2 / 100 so far**. Two marks is the correct starting score - the
+> skeleton earns them for free.
+>
+> **If you see a score, your pipeline works and everything you do from here
+> gets marked.** If you see nothing, something in Step 1 or Step 2 went wrong
+> and you must fix it **now** - raise your hand. Do not start coding and hope.
+> Every candidate who discovers a broken pipeline at the end of the session
+> loses their whole feedback loop, and nobody can recover it for them
+> afterwards.
 
 ### Step 4: Part A - the eight questions (40 marks)
 
