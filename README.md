@@ -69,8 +69,9 @@ Three things to know:
 - **Your reasoning marks show as "pending"** in your fork and are filled in
   after you submit.
 
-If the Action is not running, enable workflows in your fork (**Actions** tab →
-"I understand my workflows, go ahead and enable them").
+**Seeing no runs at all?** You have not enabled Actions on your fork yet - go
+back to Step 1 of Getting Started. This is the single most common reason a
+candidate gets to lunchtime with no score.
 
 ---
 
@@ -112,15 +113,38 @@ it.
 
 ## Getting Started
 
+### Step 1: Fork, then TURN ON ACTIONS
+
+Fork this repository to your own account.
+
+> [!CAUTION]
+> **GitHub switches off Actions in every new fork.** Until you turn them back
+> on, nothing is marked and you will see no score all morning. Do this first.
+>
+> 1. Go to **your fork** on github.com (not this repo - the one under your own
+>    username).
+> 2. Click the **Actions** tab, along the top next to Code, Issues and Pull
+>    requests.
+> 3. A yellow banner appears across the top: *"Workflows aren't being run on
+>    this forked repository."*
+> 4. Click the green button: **"I understand my workflows, go ahead and enable
+>    them."**
+>
+> That is it - once, at the start. Every push after that is marked
+> automatically. If you do not see the banner, Actions are already on; push
+> something and check that a run appears.
+
+### Step 2: Clone and install
+
 ```bash
-# 1. Fork this repository, then clone YOUR fork
+# Clone YOUR fork
 git clone [YOUR_FORK_URL]
 cd entry_test
 
-# 2. Install
+# Install
 npm install
 
-# 3. Check the toolchain works before you change anything
+# Check the toolchain works before you change anything
 npx hardhat compile
 ```
 
@@ -146,7 +170,7 @@ That prints your code score and writes `grading/report.md`.
 
 ## What To Do
 
-### Part A: MCQ (`PartA_MCQ_Answers.md`) - 50 marks
+### Part A: MCQ (`PartA_MCQ_Answers.md`) - 40 marks
 
 Eight questions on blockchain fundamentals: gas, consensus, oracles, rollups,
 wallets, and two that connect to the code you are about to write.
@@ -158,12 +182,13 @@ literally:
 **Your Answer:** B
 ```
 
-Then write two or three sentences of reasoning underneath. The reasoning carries
-10 of the 50 marks, so do not skip it even when the answer is obvious.
+Then write two or three sentences of reasoning underneath. The letters are worth
+24 marks and the reasoning another 16, so do not skip a box even when the answer
+is obvious.
 
 **Do this first.** Questions 7 and 8 tell you how to build parts of Part B.
 
-### Part B: The Contracts - 50 marks
+### Part B: The Contracts and documents - 60 marks
 
 Two skeletons in `contracts/`, each with numbered TODOs:
 
@@ -177,8 +202,10 @@ Two skeletons in `contracts/`, each with numbered TODOs:
 > exact signatures. Add whatever you like alongside them, but leave the given
 > ones as they are.
 
-Then fill in `PartB_Design.md` and `PartB_Tests.md`, and write **two** tests of
-your own in `test/` (there is a worked example there to copy from).
+The tests are worth 50. Then fill in `PartB_Design.md` (its Randomness section
+is worth 4) and `PartB_Tests.md` (its attacker section is worth 3), and write at
+least one test of your own in `test/` (worth 3 - there is a worked example there
+to copy from).
 
 ---
 
